@@ -5,7 +5,7 @@ import random
 from .IngestorInterface import IngestorInterface
 from .QuoteModel import QuoteModel
 
-class PDFIngestor(IngestorInterface):
+class TextIngestor(IngestorInterface):
     allowed_extensions = ['txt']
 
     @classmethod
