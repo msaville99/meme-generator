@@ -17,8 +17,9 @@ class DocxIngestor(IngestorInterface):
         
         for para in doc.paragraphs:
             if para.text != '':
-                parse = para.text.split(',')
-                new_quote = QuoteModel(parse[0], parse[1])
+                # print(para.text)
+                parsed = para.text.split('-')
+                new_quote = QuoteModel(parsed[0].strip(), parsed[1].strip())
                 quotes.append(new_quote)
                 
         return quotes

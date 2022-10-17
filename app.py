@@ -3,8 +3,9 @@ import os
 import requests
 from flask import Flask, render_template, abort, request
 
-from QuoteEngine import Ingestor
-import MemeEngine
+from QuoteEngine.Ingestor import Ingestor
+from QuoteEngine.QuoteModel import QuoteModel
+from MemeEngine.MemeEngine import MemeEngine
 
 app = Flask(__name__)
 meme = MemeEngine('./static')
@@ -12,6 +13,15 @@ meme = MemeEngine('./static')
 
 def setup():
     '''Load all resources'''
+
+    try:
+        os.mkdir('./tmp')
+    except OSError as error:
+        pass
+    try:
+        os.mkdir('./static')
+    except OSError as error:
+        pass
 
     quote_files = ['./_data/DogQuotes/DogQuotesTXT.txt',
                    './_data/DogQuotes/DogQuotesDOCX.docx',
@@ -55,10 +65,12 @@ def meme_post():
     '''Create a user defined meme'''
 
     image_url = request.form['image_url']
+    body = None
     body = request.form['body']
     author = request.form['author']
+    print(f'image_url = {image_url}\nbody = {body}\nauthor = {author}')
 
-    if image_url is None:
+    if image_url is not None:
         try:
             r = requests.get(image_url)
         except Exception as e:
@@ -70,10 +82,13 @@ def meme_post():
 
     if body is None:
         quote = random.choice(quotes)
+    else:
+        if author is None:
+            raise Exception('Author Required if Body is Used')
+        quote = QuoteModel(body, author)
 
-    meme = MemeEngine('./tmp')
     path = meme.make_meme(tmp, quote.body, quote.author)
-    os.remove(tmp)
+    # os.remove(tmp)
 
     return render_template('meme.html', path=path)
 

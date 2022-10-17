@@ -9,8 +9,13 @@ class QuoteModel():
         Returns:
             quote {obj} -- quote object.
         '''
+
+        body = body.strip(' " " ')
+        body = body.encode("ascii", "ignore")
+        body = body.decode()
+
         self.body = body
         self.author = author
 
     def __str__(self):
-        return f'"{self.body}" - {self.author}'
+        return f'{self.body} - {self.author}'

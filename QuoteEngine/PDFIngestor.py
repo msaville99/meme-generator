@@ -15,15 +15,15 @@ class PDFIngestor(IngestorInterface):
             raise Exception('Cannot Ingest Exception')
 
         tmp = f'./tmp/{random.randint(0,1000000)}.txt'
-        call = subprocess.call(['pdftotext', path, tmp])
-        
+        call = subprocess.call(['pdftotext', '-layout', path, tmp])
+
         file_ref = open(tmp, 'r')
         quotes = []
         for line in file_ref.readlines():
             line = line.strip('\n\r').strip()
             if len(line) > 0:
-                parsed = line.split(',')
-                new_quote = QuoteModel(parsed[0], parsed[1])
+                parsed = line.split('-')
+                new_quote = QuoteModel(parsed[0].strip(), parsed[1].strip())
                 quotes.append(new_quote)
 
         file_ref.close()

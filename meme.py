@@ -1,9 +1,42 @@
+import argparse
 import os
 import random
-import argparse
 
-from QuoteEngine import Ingestor, QuoteModel
-from MemeEngine import MemeEngine
+from QuoteEngine.Ingestor import Ingestor
+from QuoteEngine.QuoteModel import QuoteModel
+from MemeEngine.MemeEngine import MemeEngine
+
+meme = MemeEngine('./static')
+
+def setup():
+    '''Load all resources'''
+
+    try:
+        os.mkdir('./tmp')
+    except OSError as error:
+        pass
+    try:
+        os.mkdir('./static')
+    except OSError as error:
+        pass
+
+    quote_files = ['./_data/DogQuotes/DogQuotesTXT.txt',
+                './_data/DogQuotes/DogQuotesDOCX.docx',
+                './_data/DogQuotes/DogQuotesPDF.pdf',
+                './_data/DogQuotes/DogQuotesCSV.csv']
+
+    quotes = []
+    for f in quote_files:
+        quotes.extend(Ingestor.parse(f))
+
+    images_path = './_data/photos/dog/'
+    imgs = []
+
+    for root, dirs, files in os.walk(images_path):
+        imgs = [os.path.join(root, name) for name in files]
+
+    return quotes, imgs
+
 
 def generate_meme(path=None, body=None, author=None):
     '''Generate a meme given a path and a quote'''
@@ -11,31 +44,17 @@ def generate_meme(path=None, body=None, author=None):
     quote = None
 
     if path is None:
-        images = './_data/photos/dog/'
-        imgs = []
-        for root, dirs, files in os.walk(images):
-            imgs = [os.path.join(root, name) for name in files]
-
         img = random.choice(imgs)
     else:
         img = path[0]
 
     if body is None:
-        quote_files = ['./_data/DogQuotes/DogQuotesTXT.txt',
-                       './_data/DogQuotes/DogQuotesDOCX.docx',
-                       './_data/DogQuotes/DogQuotesPDF.pdf',
-                       './_data/DogQuotes/DogQuotesCSV.csv']
-        quotes = []
-        for f in quote_files:
-            quotes.extend(Ingestor.parse(f))
-
         quote = random.choice(quotes)
     else:
         if author is None:
             raise Exception('Author Required if Body is Used')
         quote = QuoteModel(body, author)
 
-    meme = MemeEngine('./tmp')
     path = meme.make_meme(img, quote.body, quote.author)
     return path
 
@@ -48,4 +67,6 @@ if __name__ == '__main__':
     parser.add_argument('--author', type=str, help='who is the person of the quote?')
 
     args = parser.parse_args()
+    quotes, imgs = setup()
+
     print(generate_meme(args.path, args.body, args.author))
