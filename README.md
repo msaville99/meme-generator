@@ -11,7 +11,14 @@ Performs the following functions:
 
 ## Setup
 ---
-Uses Python virtual environments to freeze module requirements in a reusable package.
+Uses Python virtual environments to freeze module requirements in a reusable package. 
+
+Execute in a terminal window to install dependencies:
+
+- python3 -m venv venv
+- source venv/bin/activate
+- pip install -r requirements.txt
+
 
 ## Description
 ---
