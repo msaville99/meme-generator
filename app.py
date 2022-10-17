@@ -41,9 +41,6 @@ def setup():
     return quotes, imgs
 
 
-quotes, imgs = setup()
-
-
 @app.route('/')
 def meme_rand():
     '''Generate a random meme'''
@@ -65,10 +62,8 @@ def meme_post():
     '''Create a user defined meme'''
 
     image_url = request.form['image_url']
-    body = None
     body = request.form['body']
     author = request.form['author']
-    print(f'image_url = {image_url}\nbody = {body}\nauthor = {author}')
 
     if image_url is not None:
         try:
@@ -79,18 +74,21 @@ def meme_post():
     tmp = f'./tmp/{random.randint(0,100000000)}.jpg'
     with open(tmp, 'wb') as img:
         img.write(r.content)
-
-    if body is None:
+    
+    if body == '':
         quote = random.choice(quotes)
     else:
-        if author is None:
+        if author == '':
             raise Exception('Author Required if Body is Used')
         quote = QuoteModel(body, author)
 
     path = meme.make_meme(tmp, quote.body, quote.author)
-    # os.remove(tmp)
+    os.remove(tmp)
 
     return render_template('meme.html', path=path)
+
+
+quotes, imgs = setup()
 
 
 if __name__ == '__main__':

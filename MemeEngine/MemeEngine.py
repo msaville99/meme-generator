@@ -38,10 +38,8 @@ class MemeEngine():
         
         if self.text is not None:
             draw = ImageDraw.Draw(img)
-            font = ImageFont.truetype('./fonts/IndieFlower-Regular.ttf', size=30)
-            print(f'draw.text - body = {self.text}, author = {self.author}')
-
-            draw.text((30, 400), f'"{self.text}"\n\t\t\t- {self.author}', font=font, fill='white')
+            font = ImageFont.truetype('./fonts/IndieFlower-Regular.ttf', size=20)
+            draw.text((20, 20), f'"{self.text}"\n\t\t\t- {self.author}', font=font, fill='black')
 
         img.save(out_path)
         return out_path

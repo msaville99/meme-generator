@@ -68,5 +68,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     quotes, imgs = setup()
-
     print(generate_meme(args.path, args.body, args.author))
