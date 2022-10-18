@@ -14,10 +14,17 @@ Performs the following functions:
 Uses Python virtual environments to freeze module requirements in a reusable package. 
 
 Execute in a terminal window to install dependencies:
-
+```sh
 - python3 -m venv venv
 - source venv/bin/activate
 - pip install -r requirements.txt
+```
+
+To start the flask server, run:
+```sh
+export FLASK_APP=app.py
+flask run --host 0.0.0.0 --port 3000 --reload
+```
 
 
 ## Description
@@ -37,12 +44,29 @@ def parse(cls, path: str) -> List[QuoteModel]
 ```
 #### Strategy Objects
 
-Separate strategy objects should realize IngestorInterface for each file type (csv, docx, pdf, txt).
+Separate strategy objects realizes IngestorInterface for each file type (csv, docx, pdf, txt).
 
 #### Encapsulation
 
-A final Ingestor class should realize the IngestorInterface abstract base class and encapsulate your helper classes. It should implement logic to select the appropriate helper for a given file based on filetype.
+A final Ingestor class realizes the IngestorInterface abstract base class and encapsulates the helper classes. It implements logic to select the appropriate helper for a given file based on filetype.
 
 ### Meme Engine Module
 
 The Meme Engine Module is responsible for manipulating and drawing text onto images. 
+
+#### Meme Generator CLI
+```
+$ python3 meme.py --help
+usage: meme.py [-h] [--path PATH] [--body BODY] [--author AUTHOR]
+
+(Optional) Enter specific meme image path, quote text and author.
+
+options:
+  -h, --help       show this help message and exit
+  --path PATH      where is the meme image file?
+  --body BODY      what is the text of the quote?
+  --author AUTHOR  who is the person of the quote?
+  ```
+
+#### Meme Generator Page
+http://127.0.0.1:3000/
