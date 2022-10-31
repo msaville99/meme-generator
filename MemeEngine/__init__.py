@@ -1,1 +1,3 @@
-# from .MemeEngine import MemeEngine
+"""MemeEngine Module Initialization."""
+
+from .MemeEngine import MemeEngine
